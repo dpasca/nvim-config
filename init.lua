@@ -30,6 +30,38 @@ if vim.fn.has('win32') == 1 then
     vim.opt.clipboard:append('unnamed')  -- Windows specific clipboard setting
 end
 
+-- Enable persistent undo
+local function ensure_undodir()
+  local undodir = ""
+  if vim.fn.has('win32') == 1 then
+    undodir = vim.fn.expand("$USERPROFILE") .. "\\.vim\\undodir"
+  else
+    undodir = vim.fn.expand("~/.vim/undodir")
+  end
+
+  -- Create the .vim directory if it doesn't exist
+  local vimdir = vim.fn.fnamemodify(undodir, ":h")
+  if vim.fn.isdirectory(vimdir) == 0 then
+    vim.fn.mkdir(vimdir, "p")
+  end
+
+  -- Create the undodir directory if it doesn't exist
+  if vim.fn.isdirectory(undodir) == 0 then
+    vim.fn.mkdir(undodir, "p")
+  end
+
+  return undodir
+end
+
+-- Call the function and set undodir
+local undodir = ensure_undodir()
+vim.opt.undodir = undodir
+
+-- Enable persistent undo and set undo levels
+vim.opt.undofile = true         -- Enable persistent undo
+vim.opt.undolevels = 5000       -- Maximum number of changes that can be undone
+vim.opt.undoreload = 50000      -- Maximum number of lines to save for undo on buffer reload
+
 -- Tab and indent settings
 vim.opt.expandtab = true     -- Use spaces instead of tabs
 vim.opt.tabstop = 4          -- Number of spaces tabs count for
