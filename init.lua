@@ -1,7 +1,5 @@
--- init.lua
--- Set language to English
+-- Set language and messages to English
 vim.cmd('language en_US.UTF-8')
--- Set messages to English
 vim.opt.langmenu = 'en_US.UTF-8'
 vim.env.LANG = 'en_US.UTF-8'
 
@@ -18,7 +16,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Set leader key before lazy
+-- Set "space" as leader key (before lazy)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -85,6 +83,34 @@ vim.opt.cursorline = true
 
 -- Plugin specifications
 require("lazy").setup({
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = {
+          "lua",
+          "vim",
+          "javascript",
+          "typescript",
+          "python",
+          "cpp",
+          "c",
+        },
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
+        indent = {
+          enable = true,
+        },
+      })
+    end,
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    }
+  },
+
   -- Completion and syntax
   {
     "othree/vim-autocomplpop",
@@ -101,51 +127,53 @@ require("lazy").setup({
 
   -- Search and navigation
   { "henrik/vim-qargs" },
+  -- Git grep
   { "tjennings/git-grep-vim" },
+  -- FZF configuration
   {
-      "junegunn/fzf",
-      build = function()
-          vim.fn['fzf#install']()
-      end
+    "junegunn/fzf",
+    build = function()
+      vim.fn['fzf#install']()
+    end
   },
   {
-      "junegunn/fzf.vim",
-      dependencies = { "junegunn/fzf" },
-      config = function()
-          -- Only set up if fzf is available
-          if vim.fn.exists('g:loaded_fzf') == 1 then
-              -- FZF configuration
-              vim.g.fzf_colors = {
-                  fg = {'fg', 'Normal'},
-                  bg = {'bg', 'Normal'},
-                  hl = {'fg', 'Comment'},
-                  ['fg+'] = {'fg', 'CursorLine', 'CursorColumn', 'Normal'},
-                  ['bg+'] = {'bg', 'CursorLine', 'CursorColumn'},
-                  ['hl+'] = {'fg', 'Statement'},
-                  info = {'fg', 'PreProc'},
-                  border = {'fg', 'Ignore'},
-                  prompt = {'fg', 'Conditional'},
-                  pointer = {'fg', 'Exception'},
-                  marker = {'fg', 'Keyword'},
-                  spinner = {'fg', 'Label'},
-                  header = {'fg', 'Comment'}
-              }
+    "junegunn/fzf.vim",
+    dependencies = { "junegunn/fzf" },
+    config = function()
+      -- Only set up if fzf is available
+      if vim.fn.exists('g:loaded_fzf') == 1 then
+        -- FZF configuration
+        vim.g.fzf_colors = {
+          fg = {'fg', 'Normal'},
+          bg = {'bg', 'Normal'},
+          hl = {'fg', 'Comment'},
+          ['fg+'] = {'fg', 'CursorLine', 'CursorColumn', 'Normal'},
+          ['bg+'] = {'bg', 'CursorLine', 'CursorColumn'},
+          ['hl+'] = {'fg', 'Statement'},
+          info = {'fg', 'PreProc'},
+          border = {'fg', 'Ignore'},
+          prompt = {'fg', 'Conditional'},
+          pointer = {'fg', 'Exception'},
+          marker = {'fg', 'Keyword'},
+          spinner = {'fg', 'Label'},
+          header = {'fg', 'Comment'}
+        }
 
-              -- Safe way to set keymaps
-              local function safe_keymap(mode, lhs, rhs, opts)
-                  if type(lhs) == 'string' and #lhs > 0 then
-                      vim.keymap.set(mode, lhs, rhs, opts)
-                  end
-              end
-
-              -- FZF keymaps
-              safe_keymap('n', '<C-p>', ':FZF<CR>', {silent = true})
-              safe_keymap('n', '<leader>s', ':Tags<CR>', {silent = true})
-              safe_keymap('n', '<leader>h', ':History<CR>', {silent = true})
+        -- Safe way to set keymaps
+        local function safe_keymap(mode, lhs, rhs, opts)
+          if type(lhs) == 'string' and #lhs > 0 then
+            vim.keymap.set(mode, lhs, rhs, opts)
           end
-      end,
-      -- Make sure fzf is fully loaded before configuration
-      lazy = false,
+        end
+
+        -- FZF keymaps
+        safe_keymap('n', '<C-p>', ':FZF<CR>', {silent = true})
+        safe_keymap('n', '<leader>s', ':Tags<CR>', {silent = true})
+        safe_keymap('n', '<leader>h', ':History<CR>', {silent = true})
+      end
+    end,
+    -- Make sure fzf is fully loaded before configuration
+    lazy = false,
   },
   -- Tags and code navigation
   {
@@ -282,25 +310,25 @@ end
 
 -- FZF configuration for Windows
 if vim.fn.has('win32') == 1 then
-    -- Use PowerShell instead of cmd.exe
-    vim.g.fzf_launcher = 'powershell'
+  -- Use PowerShell instead of cmd.exe
+  vim.g.fzf_launcher = 'powershell'
 
-    -- Use ripgrep if available
-    if vim.fn.executable('rg') == 1 then
-        vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
-    end
+  -- Use ripgrep if available
+  if vim.fn.executable('rg') == 1 then
+    vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  end
 
-    -- Configure layout
-    vim.g.fzf_layout = {
-        window = {
-            width = 0.9,
-            height = 0.8,
-            highlight = 'Comment'
-        }
+  -- Configure layout
+  vim.g.fzf_layout = {
+    window = {
+      width = 0.9,
+      height = 0.8,
+      highlight = 'Comment'
     }
+  }
 end
 
 -- Load additional configurations
-require('config.keymaps')  -- Put your keymaps here
-require('config.autocmds') -- Put your autocommands here
+require('config.keymaps')
+require('config.autocmds')
 
