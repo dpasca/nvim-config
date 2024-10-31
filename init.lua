@@ -128,6 +128,8 @@ require("lazy").setup({
           "python",
           "cpp",
           "c",
+          "markdown",
+          "markdown_inline",
         },
         highlight = {
           enable = true,
