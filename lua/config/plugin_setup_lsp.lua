@@ -104,6 +104,21 @@ local M = {
           handlers = {
             ["textDocument/publishDiagnostics"] = function() end
           },
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--completion-style=detailed",
+            "--header-insertion=never",
+            "--compile-commands-dir=build"  -- Looks for compile_commands.json in build directory
+          },
+          init_options = {
+            compilationDatabasePath = "build",  -- Path to compilation database
+            fallbackFlags = {
+              "-DDEBUG",
+              "-DUSE_TORCH",
+            }
+          },
         },
         typescript_language_server = {},
       }
