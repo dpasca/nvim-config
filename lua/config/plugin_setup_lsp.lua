@@ -125,6 +125,10 @@ local M = {
 
       for server, config in pairs(servers) do
         config.capabilities = capabilities
+        -- Disable semantic tokens (syntax highlighting) from LSP
+        config.on_attach = function(client, bufnr)
+          client.server_capabilities.semanticTokensProvider = nil
+        end
         lspconfig[server].setup(config)
       end
 
