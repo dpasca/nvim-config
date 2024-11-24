@@ -336,9 +336,9 @@ if vim.fn.has('win32') == 1 then
   -- Use PowerShell instead of cmd.exe
   vim.g.fzf_launcher = 'powershell'
 
-  -- Use ripgrep if available
+  -- Use ripgrep if available, excluding hidden directories and _build
   if vim.fn.executable('rg') == 1 then
-    vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+    vim.env.FZF_DEFAULT_COMMAND = 'rg --files --no-hidden --follow --glob "!.git/*" --glob "!_build/*"'
   end
 
   -- Configure layout
