@@ -136,7 +136,7 @@ require("lazy").setup({
           additional_vim_regex_highlighting = false,
         },
         indent = {
-          enable = true,
+          enable = false,  -- Disable treesitter indentation
         },
       })
     end,
@@ -350,6 +350,17 @@ if vim.fn.has('win32') == 1 then
     }
   }
 end
+
+-- Add C++ specific indentation settings
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "cpp", "c" },
+  callback = function()
+    vim.bo.cindent = true       -- Use C indentation
+    vim.bo.autoindent = true
+    vim.bo.smartindent = true
+    vim.bo.indentexpr = ""     -- Clear any indent expression
+  end
+})
 
 -- Load additional configurations
 require('config.keymaps')
