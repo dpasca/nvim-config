@@ -97,3 +97,14 @@ map('n', '<F5>', function()
         print('No previous AsyncRun command found')
     end
 end, { noremap = true })
+
+-- CodeCompanion keymaps
+-- Core functionality
+map('n', '<C-a>', '<cmd>CodeCompanionActions<cr>', { noremap = true, silent = true })
+map('v', '<C-a>', '<cmd>CodeCompanionActions<cr>', { noremap = true, silent = true })
+map('n', '<localleader>a', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true })
+map('v', '<localleader>a', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true })
+map('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', { noremap = true, silent = true })
+
+-- Command line abbreviation for CodeCompanion
+vim.cmd([[cab cc CodeCompanion]])
