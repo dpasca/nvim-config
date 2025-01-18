@@ -340,3 +340,6 @@ vim.api.nvim_create_autocmd("FileType", {
 require('config.keymaps')
 require('config.autocmds')
 
+-- Load git sync functionality
+require("config.git_sync")
+
