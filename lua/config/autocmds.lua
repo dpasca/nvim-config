@@ -106,17 +106,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     group = augroup("TerminalSettings"),
     callback = function()
         if vim.bo.buftype == 'terminal' then
-            vim.cmd('AcpDisable')
             vim.opt_local.bufhidden = 'hide'
-        end
-    end,
-})
-
-vim.api.nvim_create_autocmd("BufLeave", {
-    group = augroup("TerminalSettings"),
-    callback = function()
-        if vim.bo.buftype == 'terminal' then
-            vim.cmd('AcpEnable')
         end
     end,
 })

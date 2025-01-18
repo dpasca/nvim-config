@@ -145,12 +145,6 @@ require("lazy").setup({
     }
   },
 
-  -- Completion and syntax
-  {
-    "othree/vim-autocomplpop",
-    dependencies = { "eparreno/vim-l9" }
-  },
-
   -- Colorschemes
   {
     "xolox/vim-colorscheme-switcher",

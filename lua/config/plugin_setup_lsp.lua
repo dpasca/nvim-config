@@ -20,24 +20,19 @@ local M = {
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
+      -- Basic completion setup
+      vim.o.completeopt = 'menu,menuone,noselect'
+
       cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
+        mapping = {
+          ['<C-j>'] = cmp.mapping.select_next_item(),
+          ['<C-k>'] = cmp.mapping.select_prev_item(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true })
         },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-j>"] = cmp.mapping.select_next_item(),
-          ["<C-k>"] = cmp.mapping.select_prev_item(),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-        }),
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'buffer' }
+        }
       })
     end,
   },
@@ -64,7 +59,7 @@ local M = {
           "lua_ls",    -- Lua
           "pyright",   -- Python
           "clangd",    -- C/C++
-          "typescript-language-server",  -- TypeScript/JavaScript
+          "ts_ls",  -- TypeScript/JavaScript
         },
         automatic_installation = true,
       })
@@ -120,7 +115,39 @@ local M = {
             }
           },
         },
-        typescript_language_server = {},
+        ts_ls = {
+          cmd = { "typescript-language-server", "--stdio" },
+          filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
+          root_dir = function() return vim.loop.cwd() end,
+          settings = {
+            typescript = {
+              format = {
+                insertSpaceAfterCommaDelimiter = true,
+                insertSpaceAfterSemicolonInForStatements = true,
+                insertSpaceBeforeAndAfterBinaryOperators = true,
+                insertSpaceAfterConstructor = false,
+                insertSpaceAfterKeywordsInControlFlowStatements = true,
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions = true,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false,
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false,
+                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces = false,
+                insertSpaceAfterTypeAssertion = false,
+                placeOpenBraceOnNewLineForFunctions = false,
+                placeOpenBraceOnNewLineForControlBlocks = false,
+              },
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        },  -- Use typescript-language-server for TypeScript/JavaScript
       }
 
       for server, config in pairs(servers) do
