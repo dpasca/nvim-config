@@ -86,6 +86,13 @@ end
 
 -- Function to commit and push changes
 function M.commit_and_push(commit_msg)
+    -- If no commit message provided, just push
+    if not commit_msg or commit_msg == "" then
+        execute_git_command('push')
+        return
+    end
+
+    -- If commit message provided, do the full commit+push flow
     -- First show status
     local status_win = show_status()
 
@@ -93,17 +100,6 @@ function M.commit_and_push(commit_msg)
     if not has_changes() then
         vim.notify('No changes to commit', vim.log.levels.WARN)
         return
-    end
-
-    -- If no commit message provided, ask for one
-    if not commit_msg or commit_msg == "" then
-        -- Close status window before input prompt
-        vim.api.nvim_win_close(status_win, true)
-        commit_msg = vim.fn.input('Commit message: ')
-        if commit_msg == "" then
-            vim.notify('Commit message cannot be empty', vim.log.levels.ERROR)
-            return
-        end
     end
 
     -- Add all changes
