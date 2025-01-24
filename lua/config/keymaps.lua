@@ -6,6 +6,7 @@ local map = vim.keymap.set
 map('n', ';', ':', { noremap = true })
 map('n', '_', '^', { noremap = true }) -- Move to first non-blank character (standard but somehow not working)
 map('n', '<CR>', ':noh<CR><CR>', { noremap = true, silent = true })
+map('n', '<leader>stw', [[:%s/\s\+$//e<CR>]], { noremap = true, silent = true })
 
 -- Quickfix navigation
 map('n', '<A-j>', ':cnext<CR>', { silent = true })
