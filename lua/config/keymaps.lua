@@ -8,6 +8,19 @@ map('n', '_', '^', { noremap = true }) -- Move to first non-blank character (sta
 map('n', '<CR>', ':noh<CR><CR>', { noremap = true, silent = true })
 map('n', '<leader>stw', [[:%s/\s\+$//e<CR>]], { noremap = true, silent = true })
 
+-- Separator macros
+-- For C++ style comments (when typing ///// in insert mode)
+vim.cmd([[
+inoremap <expr> / getline('.') =~ '\v^/+$' && len(getline('.')) >= 4 && len(getline('.')) < 5 ? 
+      \ "<BS><BS><BS><BS>//==================================================================" : '/'
+]])
+
+-- For Python style comments (when typing ##### in insert mode)
+vim.cmd([[
+inoremap <expr> # getline('.') =~ '\v^#+$' && len(getline('.')) >= 4 && len(getline('.')) < 5 ? 
+      \ "<BS><BS><BS><BS>#==================================================================" : '#'
+]])
+
 -- Quickfix navigation
 map('n', '<A-j>', ':cnext<CR>', { silent = true })
 map('n', '<A-k>', ':cprevious<CR>', { silent = true })
