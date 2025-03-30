@@ -64,8 +64,9 @@ if vim.fn.executable("rg") == 1 then
     map('n', '<leader>wf', ':grep -w <cword> ', { noremap = true })
     map('n', '<leader>f', ':grep ', { noremap = true })
 else
-    map('n', '<leader>wf', ':GitGrep --recurse-submodules -w <cword> ', { noremap = true })
-    map('n', '<leader>f', ':GitGrep --recurse-submodules ', { noremap = true })
+    -- Use Fugitive's :Ggrep when rg is not available
+    map('n', '<leader>wf', ':Ggrep --recurse-submodules -w <cword><CR>', { noremap = true })
+    map('n', '<leader>f', ':Ggrep --recurse-submodules ', { noremap = true })
 end
 
 -- Tag navigation and directory changing

@@ -155,8 +155,7 @@ require("lazy").setup({
 
   -- Search and navigation
   { "henrik/vim-qargs" },
-  -- Git grep
-  { "tjennings/git-grep-vim" },
+  -- Git grep functionality provided by vim-fugitive (:Ggrep)
 
   require("config.plugin_setup_lsp"),
 
@@ -343,3 +342,6 @@ require('config.autocmds')
 -- Load git sync functionality
 require("config.git_sync")
 
+-- Alias :GitGrep (lowercase g) to Fugitive's :Ggrep (uppercase G)
+-- This allows using the old command name while leveraging Fugitive's better quickfix integration.
+vim.api.nvim_create_user_command('GitGrep', 'Ggrep', { nargs = '*', complete = 'file' })
